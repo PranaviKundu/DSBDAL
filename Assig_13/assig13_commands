@@ -1,0 +1,231 @@
+(base) admin1@admin1-ThinkCentre-M80:~/Desktop/7340$ nano sample_weather.txt
+(base) admin1@admin1-ThinkCentre-M80:~/Desktop/7340$ 2024-01-01,25,18,12
+2024-01-01,25,18,12: command not found
+(base) admin1@admin1-ThinkCentre-M80:~/Desktop/7340$ 2024-01-02,28,20,10
+2024-01-02,28,20,10: command not found
+(base) admin1@admin1-ThinkCentre-M80:~/Desktop/7340$ 2024-01-03,30,21,15
+2024-01-03,30,21,15: command not found
+(base) admin1@admin1-ThinkCentre-M80:~/Desktop/7340$ 2024-01-04,27,19,11
+2024-01-04,27,19,11: command not found
+(base) admin1@admin1-ThinkCentre-M80:~/Desktop/7340$ start-dfs.sh
+
+Starting namenodes on [localhost]
+Starting datanodes
+Starting secondary namenodes [admin1-ThinkCentre-M80]
+2026-04-23 13:50:59,827 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+(base) admin1@admin1-ThinkCentre-M80:~/Desktop/7340$ start-yarn.sh
+Starting resourcemanager
+Starting nodemanagers
+(base) admin1@admin1-ThinkCentre-M80:~/Desktop/7340$ jps
+6434 ResourceManager
+5746 NameNode
+5891 DataNode
+6100 SecondaryNameNode
+6585 NodeManager
+6975 Jps
+(base) admin1@admin1-ThinkCentre-M80:~/Desktop/7340$ hdfs dfs -mkdir /weather
+2026-04-23 13:52:34,620 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+(base) admin1@admin1-ThinkCentre-M80:~/Desktop/7340$ hdfs dfs -put sample_weather.txt /weather/
+2026-04-23 13:52:56,875 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+(base) admin1@admin1-ThinkCentre-M80:~/Desktop/7340$ hdfs dfs -ls /weather2026-04-23 13:53:04,619 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Found 1 items
+-rw-r--r--   1 admin1 supergroup        100 2026-04-23 13:52 /weather/sample_weather.txt
+(base) admin1@admin1-ThinkCentre-M80:~/Desktop/7340$ nano WeatherAvg.java
+(base) admin1@admin1-ThinkCentre-M80:~/Desktop/7340$ export HADOOP_CLASSPATH=$(hadoop classpath)
+(base) admin1@admin1-ThinkCentre-M80:~/Desktop/7340$ javac -classpath ${HADOOP_CLASSPATH} -d . WeatherAvg.java
+(base) admin1@admin1-ThinkCentre-M80:~/Desktop/7340$ jar -cvf weather.jar *
+added manifest
+adding: sample_weather.txt(in = 100) (out= 54)(deflated 46%)
+adding: WeatherAvg.class(in = 1445) (out= 795)(deflated 44%)
+adding: WeatherAvg.java(in = 2229) (out= 728)(deflated 67%)
+adding: WeatherAvg$Map.class(in = 1867) (out= 772)(deflated 58%)
+adding: WeatherAvg$Reduce.class(in = 1685) (out= 727)(deflated 56%)
+(base) admin1@admin1-ThinkCentre-M80:~/Desktop/7340$ hadoop jar weather.jar WeatherAvg /weather/sample_weather.txt /weather/output
+2026-04-23 13:54:19,957 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+2026-04-23 13:54:21,027 INFO impl.MetricsConfig: Loaded properties from hadoop-metrics2.properties
+2026-04-23 13:54:21,384 INFO impl.MetricsSystemImpl: Scheduled Metric snapshot period at 10 second(s).
+2026-04-23 13:54:21,384 INFO impl.MetricsSystemImpl: JobTracker metrics system started
+2026-04-23 13:54:22,030 WARN mapreduce.JobResourceUploader: Hadoop command-line option parsing not performed. Implement the Tool interface and execute your application with ToolRunner to remedy this.
+2026-04-23 13:54:22,256 INFO input.FileInputFormat: Total input files to process : 1
+2026-04-23 13:54:22,505 INFO mapreduce.JobSubmitter: number of splits:1
+2026-04-23 13:54:23,171 INFO mapreduce.JobSubmitter: Submitting tokens for job: job_local239398549_0001
+2026-04-23 13:54:23,171 INFO mapreduce.JobSubmitter: Executing with tokens: []
+2026-04-23 13:54:23,532 INFO mapreduce.Job: The url to track the job: http://localhost:8080/
+2026-04-23 13:54:23,535 INFO mapreduce.Job: Running job: job_local239398549_0001
+2026-04-23 13:54:23,542 INFO mapred.LocalJobRunner: OutputCommitter set in config null
+2026-04-23 13:54:23,580 INFO output.PathOutputCommitterFactory: No output committer factory defined, defaulting to FileOutputCommitterFactory
+2026-04-23 13:54:23,582 INFO output.FileOutputCommitter: File Output Committer Algorithm version is 2
+2026-04-23 13:54:23,583 INFO output.FileOutputCommitter: FileOutputCommitter skip cleanup _temporary folders under output directory:false, ignore cleanup failures: false
+2026-04-23 13:54:23,584 INFO mapred.LocalJobRunner: OutputCommitter is org.apache.hadoop.mapreduce.lib.output.FileOutputCommitter
+2026-04-23 13:54:23,697 INFO mapred.LocalJobRunner: Waiting for map tasks
+2026-04-23 13:54:23,698 INFO mapred.LocalJobRunner: Starting task: attempt_local239398549_0001_m_000000_0
+2026-04-23 13:54:23,742 INFO output.PathOutputCommitterFactory: No output committer factory defined, defaulting to FileOutputCommitterFactory
+2026-04-23 13:54:23,742 INFO output.FileOutputCommitter: File Output Committer Algorithm version is 2
+2026-04-23 13:54:23,742 INFO output.FileOutputCommitter: FileOutputCommitter skip cleanup _temporary folders under output directory:false, ignore cleanup failures: false
+2026-04-23 13:54:23,831 INFO mapred.Task:  Using ResourceCalculatorProcessTree : [ ]
+2026-04-23 13:54:23,839 INFO mapred.MapTask: Processing split: hdfs://localhost:9000/weather/sample_weather.txt:0+100
+2026-04-23 13:54:24,186 INFO mapred.MapTask: (EQUATOR) 0 kvi 26214396(104857584)
+2026-04-23 13:54:24,187 INFO mapred.MapTask: mapreduce.task.io.sort.mb: 100
+2026-04-23 13:54:24,187 INFO mapred.MapTask: soft limit at 83886080
+2026-04-23 13:54:24,187 INFO mapred.MapTask: bufstart = 0; bufvoid = 104857600
+2026-04-23 13:54:24,187 INFO mapred.MapTask: kvstart = 26214396; length = 6553600
+2026-04-23 13:54:24,194 INFO mapred.MapTask: Map output collector class = org.apache.hadoop.mapred.MapTask$MapOutputBuffer
+2026-04-23 13:54:24,559 INFO mapreduce.Job: Job job_local239398549_0001 running in uber mode : false
+2026-04-23 13:54:24,561 INFO mapreduce.Job:  map 0% reduce 0%
+2026-04-23 13:54:25,435 INFO mapred.LocalJobRunner: 
+2026-04-23 13:54:25,462 INFO mapred.MapTask: Starting flush of map output
+2026-04-23 13:54:25,462 INFO mapred.MapTask: Spilling map output
+2026-04-23 13:54:25,462 INFO mapred.MapTask: bufstart = 0; bufend = 215; bufvoid = 104857600
+2026-04-23 13:54:25,462 INFO mapred.MapTask: kvstart = 26214396(104857584); kvend = 26214340(104857360); length = 57/6553600
+2026-04-23 13:54:25,836 INFO mapred.MapTask: Finished spill 0
+2026-04-23 13:54:25,946 INFO mapred.Task: Task:attempt_local239398549_0001_m_000000_0 is done. And is in the process of committing
+2026-04-23 13:54:25,977 INFO mapred.LocalJobRunner: map
+2026-04-23 13:54:25,977 INFO mapred.Task: Task 'attempt_local239398549_0001_m_000000_0' done.
+2026-04-23 13:54:26,026 INFO mapred.Task: Final Counters for attempt_local239398549_0001_m_000000_0: Counters: 23
+	File System Counters
+		FILE: Number of bytes read=4228
+		FILE: Number of bytes written=640540
+		FILE: Number of read operations=0
+		FILE: Number of large read operations=0
+		FILE: Number of write operations=0
+		HDFS: Number of bytes read=100
+		HDFS: Number of bytes written=0
+		HDFS: Number of read operations=5
+		HDFS: Number of large read operations=0
+		HDFS: Number of write operations=1
+		HDFS: Number of bytes read erasure-coded=0
+	Map-Reduce Framework
+		Map input records=5
+		Map output records=15
+		Map output bytes=215
+		Map output materialized bytes=251
+		Input split bytes=113
+		Combine input records=0
+		Spilled Records=15
+		Failed Shuffles=0
+		Merged Map outputs=0
+		GC time elapsed (ms)=9
+		Total committed heap usage (bytes)=216006656
+	File Input Format Counters 
+		Bytes Read=100
+2026-04-23 13:54:26,026 INFO mapred.LocalJobRunner: Finishing task: attempt_local239398549_0001_m_000000_0
+2026-04-23 13:54:26,027 INFO mapred.LocalJobRunner: map task executor complete.
+2026-04-23 13:54:26,060 INFO mapred.LocalJobRunner: Waiting for reduce tasks
+2026-04-23 13:54:26,060 INFO mapred.LocalJobRunner: Starting task: attempt_local239398549_0001_r_000000_0
+2026-04-23 13:54:26,096 INFO output.PathOutputCommitterFactory: No output committer factory defined, defaulting to FileOutputCommitterFactory
+2026-04-23 13:54:26,097 INFO output.FileOutputCommitter: File Output Committer Algorithm version is 2
+2026-04-23 13:54:26,097 INFO output.FileOutputCommitter: FileOutputCommitter skip cleanup _temporary folders under output directory:false, ignore cleanup failures: false
+2026-04-23 13:54:26,098 INFO mapred.Task:  Using ResourceCalculatorProcessTree : [ ]
+2026-04-23 13:54:26,131 INFO mapred.ReduceTask: Using ShuffleConsumerPlugin: org.apache.hadoop.mapreduce.task.reduce.Shuffle@422e297a
+2026-04-23 13:54:26,134 WARN impl.MetricsSystemImpl: JobTracker metrics system already initialized!
+2026-04-23 13:54:26,794 INFO mapreduce.Job:  map 100% reduce 0%
+2026-04-23 13:54:26,877 INFO reduce.MergeManagerImpl: MergerManager: memoryLimit=662070848, maxSingleShuffleLimit=165517712, mergeThreshold=436966784, ioSortFactor=10, memToMemMergeOutputsThreshold=10
+2026-04-23 13:54:26,884 INFO reduce.EventFetcher: attempt_local239398549_0001_r_000000_0 Thread started: EventFetcher for fetching Map Completion Events
+2026-04-23 13:54:27,184 INFO reduce.LocalFetcher: localfetcher#1 about to shuffle output of map attempt_local239398549_0001_m_000000_0 decomp: 247 len: 251 to MEMORY
+2026-04-23 13:54:27,301 INFO reduce.InMemoryMapOutput: Read 247 bytes from map-output for attempt_local239398549_0001_m_000000_0
+2026-04-23 13:54:27,319 INFO reduce.MergeManagerImpl: closeInMemoryFile -> map-output of size: 247, inMemoryMapOutputs.size() -> 1, commitMemory -> 0, usedMemory ->247
+2026-04-23 13:54:27,335 INFO reduce.EventFetcher: EventFetcher is interrupted.. Returning
+2026-04-23 13:54:27,336 INFO mapred.LocalJobRunner: 1 / 1 copied.
+2026-04-23 13:54:27,336 INFO reduce.MergeManagerImpl: finalMerge called with 1 in-memory map-outputs and 0 on-disk map-outputs
+2026-04-23 13:54:27,404 INFO mapred.Merger: Merging 1 sorted segments
+2026-04-23 13:54:27,404 INFO mapred.Merger: Down to the last merge-pass, with 1 segments left of total size: 236 bytes
+2026-04-23 13:54:27,409 INFO reduce.MergeManagerImpl: Merged 1 segments, 247 bytes to disk to satisfy reduce memory limit
+2026-04-23 13:54:27,410 INFO reduce.MergeManagerImpl: Merging 1 files, 251 bytes from disk
+2026-04-23 13:54:27,411 INFO reduce.MergeManagerImpl: Merging 0 segments, 0 bytes from memory into reduce
+2026-04-23 13:54:27,411 INFO mapred.Merger: Merging 1 sorted segments
+2026-04-23 13:54:27,412 INFO mapred.Merger: Down to the last merge-pass, with 1 segments left of total size: 236 bytes
+2026-04-23 13:54:27,413 INFO mapred.LocalJobRunner: 1 / 1 copied.
+2026-04-23 13:54:27,628 INFO Configuration.deprecation: mapred.skip.on is deprecated. Instead, use mapreduce.job.skiprecords
+2026-04-23 13:54:28,227 INFO mapred.Task: Task:attempt_local239398549_0001_r_000000_0 is done. And is in the process of committing
+2026-04-23 13:54:28,233 INFO mapred.LocalJobRunner: 1 / 1 copied.
+2026-04-23 13:54:28,233 INFO mapred.Task: Task attempt_local239398549_0001_r_000000_0 is allowed to commit now
+2026-04-23 13:54:28,335 INFO output.FileOutputCommitter: Saved output of task 'attempt_local239398549_0001_r_000000_0' to hdfs://localhost:9000/weather/output
+2026-04-23 13:54:28,337 INFO mapred.LocalJobRunner: reduce > reduce
+2026-04-23 13:54:28,337 INFO mapred.Task: Task 'attempt_local239398549_0001_r_000000_0' done.
+2026-04-23 13:54:28,338 INFO mapred.Task: Final Counters for attempt_local239398549_0001_r_000000_0: Counters: 30
+	File System Counters
+		FILE: Number of bytes read=4762
+		FILE: Number of bytes written=640791
+		FILE: Number of read operations=0
+		FILE: Number of large read operations=0
+		FILE: Number of write operations=0
+		HDFS: Number of bytes read=100
+		HDFS: Number of bytes written=46
+		HDFS: Number of read operations=10
+		HDFS: Number of large read operations=0
+		HDFS: Number of write operations=3
+		HDFS: Number of bytes read erasure-coded=0
+	Map-Reduce Framework
+		Combine input records=0
+		Combine output records=0
+		Reduce input groups=3
+		Reduce shuffle bytes=251
+		Reduce input records=15
+		Reduce output records=3
+		Spilled Records=15
+		Shuffled Maps =1
+		Failed Shuffles=0
+		Merged Map outputs=1
+		GC time elapsed (ms)=0
+		Total committed heap usage (bytes)=216006656
+	Shuffle Errors
+		BAD_ID=0
+		CONNECTION=0
+		IO_ERROR=0
+		WRONG_LENGTH=0
+		WRONG_MAP=0
+		WRONG_REDUCE=0
+	File Output Format Counters 
+		Bytes Written=46
+2026-04-23 13:54:28,339 INFO mapred.LocalJobRunner: Finishing task: attempt_local239398549_0001_r_000000_0
+2026-04-23 13:54:28,339 INFO mapred.LocalJobRunner: reduce task executor complete.
+2026-04-23 13:54:28,796 INFO mapreduce.Job:  map 100% reduce 100%
+2026-04-23 13:54:29,798 INFO mapreduce.Job: Job job_local239398549_0001 completed successfully
+2026-04-23 13:54:29,844 INFO mapreduce.Job: Counters: 36
+	File System Counters
+		FILE: Number of bytes read=8990
+		FILE: Number of bytes written=1281331
+		FILE: Number of read operations=0
+		FILE: Number of large read operations=0
+		FILE: Number of write operations=0
+		HDFS: Number of bytes read=200
+		HDFS: Number of bytes written=46
+		HDFS: Number of read operations=15
+		HDFS: Number of large read operations=0
+		HDFS: Number of write operations=4
+		HDFS: Number of bytes read erasure-coded=0
+	Map-Reduce Framework
+		Map input records=5
+		Map output records=15
+		Map output bytes=215
+		Map output materialized bytes=251
+		Input split bytes=113
+		Combine input records=0
+		Combine output records=0
+		Reduce input groups=3
+		Reduce shuffle bytes=251
+		Reduce input records=15
+		Reduce output records=3
+		Spilled Records=30
+		Shuffled Maps =1
+		Failed Shuffles=0
+		Merged Map outputs=1
+		GC time elapsed (ms)=9
+		Total committed heap usage (bytes)=432013312
+	Shuffle Errors
+		BAD_ID=0
+		CONNECTION=0
+		IO_ERROR=0
+		WRONG_LENGTH=0
+		WRONG_MAP=0
+		WRONG_REDUCE=0
+	File Input Format Counters 
+		Bytes Read=100
+	File Output Format Counters 
+		Bytes Written=46
+(base) admin1@admin1-ThinkCentre-M80:~/Desktop/7340$ hdfs dfs -cat /weather/output/part-r-00000
+2026-04-23 13:54:38,562 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+DewPoint	20.0
+Temperature	27.8
+WindSpeed	12.4
+
